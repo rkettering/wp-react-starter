@@ -9,7 +9,7 @@ var uglifyPlugin = new webpack.optimize.UglifyJsPlugin({
 
 module.exports = {
     entry: {
-        App: './src/app/App.jsx',
+        app: './src/app/app.jsx',
         vendor: ['jquery', 'underscore', 'backbone', 'react', 'reflux']
     },
     output: {
