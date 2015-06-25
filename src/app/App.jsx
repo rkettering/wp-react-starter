@@ -1,8 +1,7 @@
-
-
 var Backbone = require('backbone');
-var React = require('react');
-var Reflux = require('reflux');
+var React = require('react/addons');
+
+var Root = require('./root.jsx');
 
 var navigateActionStore = require('./stores/navigate.js');
 var mainActionStore = require('./stores/main.js');
@@ -11,7 +10,7 @@ var mainActionStore = require('./stores/main.js');
 var App = Backbone.Router.extend({
     routes: {
         "home": "home",
-        "login": "login",
+        "login": "login", 
 
         // default
         "": "home"
@@ -21,58 +20,29 @@ var App = Backbone.Router.extend({
         // webpack split-point to create new chunks
         require.ensure([], function() {
             var Home = require('./components/home/home.jsx');
-            navigateActionStore.actions.sectionNavigate(Home);
+            navigateActionStore.actions.sectionNavigate(Home, 'home');
         });
-    },
-
-    feed: function() {
-
-    },
-
-    notifications: function() {
-
-    },
-
-    profile: function() {
-
-    },
-
-    settings: function() {
-
     },
 
     login: function() {
         // webpack split-point to create new chunks
-        // require.ensure([], function() {
-        //     var Login = require('../login/LoginPage.jsx');
-        //     React.render(<Login/>, document.getElementById('appContent'));
-        // });
-    }
-
-});
-
-Backbone.history.start();
-
-
-
-
-var Root = React.createClass({
-    mixins: [Reflux.connect(navigateActionStore.store, "navigate"), Reflux.connect(mainActionStore.store, "main")],
-    render: function() {
-        var Section = this.state.navigate.react.current || null;
-        return (
-            <div>
-                {Section ?
-                    <Section {...this.state.main} />
-                     : 'NO CURRENT NAV COMP'}
-            </div>
-        );
+        require.ensure([], function() {
+            var Login = require('./components/login/login.jsx');
+            navigateActionStore.actions.sectionNavigate(Login, 'login');
+        });
     }
 });
-
-React.render(<Root/>, document.getElementById('appRoot'));
-
-
-
 
 module.exports = new App();
+Backbone.history.start(); 
+
+React.render(<Root/>, document.getElementById('app-root'));
+
+
+// listen for appropriate state from main action store to start app
+mainActionStore.store.listen( function(mainStore) {
+
+});
+
+
+

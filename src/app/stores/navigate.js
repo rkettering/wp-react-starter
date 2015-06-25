@@ -14,8 +14,9 @@ var store = Reflux.createStore({
     data: {},
 
     init: function() {
-        this.data.react = {
-            current: null
+        this.data = {
+            current: {name: null, react: null},
+            last: {name: null, react: null}
         };
     },
     getInitialState: function() {
@@ -24,12 +25,13 @@ var store = Reflux.createStore({
 
 
     // get passed a react constructor (loaded in a webpack codesplit)
-    onSectionNavigate: function(react) {
+    onSectionNavigate: function(react, name) {
         if(typeof react !== 'function') {
             console.error('navigate.onSectionNavigate expected a function, was: ', react);
             return;
         }
-        this.data.react.current = react;
+        this.data.last = this.data.current;
+        this.data.current = {name: name, react: react};
         this.trigger(this.data);
     }
 });

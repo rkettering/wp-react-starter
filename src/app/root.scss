@@ -1,0 +1,14 @@
+.root-component {
+	.section-wrapper {
+		position: relative;
+        background: #cccccc;
+        perspective: 1000px;
+		.slide-in-out {
+			position: absolute;
+			top: 0;
+			width: 100%;
+			min-height: 400px;
+            background: #dddddd;
+		}
+	}
+}

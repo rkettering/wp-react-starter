@@ -3,7 +3,7 @@ var Reflux = require('reflux');
 
 
 var actions = Reflux.createActions([
-	"someAction"
+    "someAction"
 ]);
 
 
@@ -11,10 +11,15 @@ var actions = Reflux.createActions([
 
 var store = Reflux.createStore({
     listenables: [actions],
-    data: {},
+    data: null,
 
     init: function() {
-        this.data = {test: 'Hello mine freund!', b: 'yes'}
+        this.data = {
+            isInitialized: false,
+            isAuthenticated: false
+        };
+
+        // TODO: listen to ajax api and trigger initialize shiz
     },
     getInitialState: function() {
         return this.data;

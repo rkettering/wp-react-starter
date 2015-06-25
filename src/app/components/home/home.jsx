@@ -5,10 +5,9 @@ var Reflux = require('reflux');
 var Home = React.createClass({
     render: function() {
         return (
-            <div>
+            <div style={{background: 'gray'}}>
             	{'HOME'}
-            	{this.props}
-            	
+            	<a href='#login'>Login</a>
             </div>
         );
     }
