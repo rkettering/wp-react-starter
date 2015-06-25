@@ -25,7 +25,10 @@ module.exports = {
                 query: {compact: false},
                 exclude: /(node_modules)/
             },
-            { test: /\.scss$/, loader: 'style!css!autoprefixer-loader?{browsers:["last 2 version", "Explorer > 8", "iOS > 6", "Android > 3"]}!sass'},
+            {
+                test: /\.scss$/,
+                loader: 'style!css!autoprefixer-loader?{browsers:["last 2 version", "Explorer > 8", "iOS > 6", "Android > 3"]}!sass'
+            },
             { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: 'url?limit=10000&minetype=application/font-woff' },
             { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,  loader: 'url?limit=10000&mimetype=application/font-woff2' },
             { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&minetype=application/octet-stream' },
