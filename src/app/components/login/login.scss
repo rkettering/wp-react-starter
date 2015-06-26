@@ -1,0 +1,41 @@
+@import "../../style";
+
+.login-component {
+    overflow: hidden;
+    background: $buzz-yellow;
+    min-height: 600px;
+    .login-box {
+        width: 400px;
+        margin: 100px auto 0 auto;
+        text-align: center;
+    }
+    .logo {
+        .symb {
+            $symb-dim: 100px;
+            display: inline-block;
+            font-size: $symb-dim;
+            line-height: $symb-dim;
+            width: $symb-dim;
+            height: $symb-dim;
+            border-radius: $symb-dim/2;
+            background: black;
+            color: $buzz-yellow;
+            overflow: hidden;
+        }
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+    .controls {
+        input, button {
+            margin-bottom: 6px;
+            width: 50%;
+        }
+        button {
+            margin-top: 20px;
+            font-size: 1.2em;
+            padding: 10px;
+            background: $buzz-yellow;
+            border: 1px solid black;
+        }
+    }
+}

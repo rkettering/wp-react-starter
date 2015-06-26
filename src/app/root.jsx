@@ -5,7 +5,8 @@ var Reflux = require('reflux');
 var navigateActionStore = require('./stores/navigate.js');
 var mainActionStore = require('./stores/main.js');
 
-var SlideInOut = require('./components/shared/SlideInOut.jsx');
+var SlideInOut = require('./components/shared/slideInOut.jsx');
+var RootError = require('./components/shared/rootError.jsx');
 
 require('./root.scss');
 
@@ -14,42 +15,47 @@ var Root = React.createClass({
         Reflux.connect(mainActionStore.store, "main")],
 
     render: function() {
+        var rendered = null;
 
-return this.state.navigate.current.react ? 
+        // if not authenticated, and the route/nav is not login -- then render something else
+        if(!this.state.main.isAuthenticated && this.state.navigate.current.name != 'login') {
+            rendered = this.renderMessage('Not authenticated. :(');
+        } 
+
+        // ok, lets render the current section
+        else {
+            rendered = this.state.navigate.current.react ? 
                 this.renderCurrentSection() : 
                 this.renderMessage('No active section...');
+        }
 
-        // if(!this.state.main.isInitialized) {
-        //     return this.renderMessage('Initializing...');
-        // }
-
-        // if(!this.state.main.isAuthenticated) {
-        //     return this.renderMessage('Not authenticated. :(');
-        // } 
-
-        // else {
-        //     return this.state.navigate.current.react ? 
-        //         this.renderCurrentSection() : 
-        //         this.renderMessage('No active section...');
-        // }
-
+        return (
+            <div className="root-component">
+                {rendered}
+                <RootError error={this.state.main.apiAjaxError} hideHandler={this.handleErrorHide} />
+            </div>
+        );
     },
+
     renderMessage: function(msg) {
-        return <h3 style={{color: '#cccccc'}}>{msg}</h3>;
+        return <h3 className="root-message">{msg}</h3>;
     },
+
     renderCurrentSection: function() {
         var current = this.state.navigate.current,
             CurrentSection = current.react;
 
-        return (
-            <div className="root-component">
-                <React.addons.TransitionGroup component="div" className="section-wrapper">
-                    <SlideInOut key={current.name}>
-                        <CurrentSection {...this.state.main} /> 
-                    </SlideInOut>
-                </React.addons.TransitionGroup>
-            </div>
+        return (            
+            <React.addons.TransitionGroup component="div" className="section-wrapper">
+                <SlideInOut key={current.name}>
+                    <CurrentSection {...this.state.main} /> 
+                </SlideInOut>
+            </React.addons.TransitionGroup>
         );
+    },
+
+    handleErrorHide: function() {
+        mainActionStore.actions.clearApiAjaxError();
     }
 });
 
