@@ -3,8 +3,6 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Reflux = require('reflux');
 
-var Authentication = require('./authentication.js');
-
 var actions = Reflux.createActions([
 	// in
 	'initialize',
@@ -42,7 +40,6 @@ var Api = {
 		});
 	}
 };
-
 
 
 module.exports = {api: Api, actions: actions};
