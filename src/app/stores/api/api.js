@@ -39,7 +39,4 @@ var Api = {
     }
 };
 
-
-
-module.exports = {api: Api, actions: actions}; 
-
+module.exports = {api: Api, actions: actions};
