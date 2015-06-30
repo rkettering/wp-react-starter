@@ -3,9 +3,10 @@ var React = require('react');
 
 var Loading = React.createClass({
     render: function() {
+        var logo = '❄';
         return (
             <div className="loading-component">
-                <div className="login-box">
+                <div className="loading-box">
                     <div className="logo">
                         <div>
                             <div className="symb">{logo}</div>
