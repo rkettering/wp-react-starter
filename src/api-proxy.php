@@ -48,13 +48,24 @@ function fetch($url, $data) {
     curl_setopt( $ch, CURLOPT_COOKIEJAR,  $cookieJar );
     curl_setopt( $ch, CURLOPT_COOKIEFILE, $cookieJar );
 
-    $result = curl_exec($ch);
+    $data = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    $result = array(
+      'data' => $data,
+      'status' => $status
+    );
+
     curl_close($ch);
 
     return $result;
 }
 
+$res = fetch($url.$endPoint, $data);
+
+http_response_code($res['status']);
 header('Content-Type: application/json');
-echo fetch($url.$endPoint, $data);
+
+echo $res['data'];
 
 ?>
