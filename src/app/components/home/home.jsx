@@ -4,6 +4,8 @@ var Reflux = require('reflux');
 
 var FeedStore = require('../../stores/feed.js');
 
+var FeedItem = require('./feedItem.jsx');
+
 var Home = React.createClass({
 	mixins: [Reflux.connect(FeedStore.store, "feedStore")],
 	componentDidMount: function() {
@@ -15,7 +17,7 @@ var Home = React.createClass({
             	{
             		this.state.feedStore.feeds &&
             		this.state.feedStore.feeds.map( function(feed, idx) {
-            			return <div key={idx} className="feed-item">{feed.feedSummary.description}</div>;
+            			return <FeedItem key={idx} {...feed} />;
             		})
             	}
             </div>
