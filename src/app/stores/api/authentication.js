@@ -3,43 +3,58 @@ var Reflux = require('reflux');
 var actions = Reflux.createActions([
     "authenticate",
     "authenticated",
-    "authenticateFailed"
+    "authenticateFailed",
+    "authenticateCached",
+    "unableToAuthenticateWithCachedValues"
 ]);
 
 
 // SERVICE
-var Service = {
+var service = {
     url: 'authentication/'
 };
     
 // OPERATION - authenticate
-Service.authenticate = {
+service.authenticate = {
     url: 'authenticate.biws',
     execute: function(username, password) {
         var Api = require('./api.js').api,
             data = {username: username, password: password};
 
-        return Api.ajax(Service.url+this.url, data)
+        return Api.ajax(service.url+this.url, data)
             .done(function(data, status, xhr) {
-                //console.log('authentication.authenticate.execute.done', jqXHR);
                 if(xhr.status == 204) {
-                    actions.authenticateFailed();
+                    actions.authenticateFailed(data);
                 } else {
-                    console.log('authenticate.execute', data);
                     actions.authenticated(data);
                 }
             })
             .always(function() {
-                console.log('done done done');
+                
             });
     }
 };
 
-actions.authenticate.listen(function(user,pass){
-    Service.authenticate.execute(user, pass);
+
+actions.authenticateCached.listen(function(){
+    var u = sessionStorage.getItem('username'),
+        p = sessionStorage.getItem('password');
+
+        if(u && p) {
+            service.authenticate.execute(u, p);
+        } else {
+            actions.unableToAuthenticateWithCachedValues();
+        }
 });
 
-module.exports = {service: Service, actions: actions};
+
+actions.authenticate.listen(function(user,pass){
+    sessionStorage.setItem('username',user);
+    sessionStorage.setItem('password',pass);
+    service.authenticate.execute(user, pass);
+});
+
+module.exports = {service: service, actions: actions};
 
 
 

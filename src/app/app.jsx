@@ -3,10 +3,10 @@ var React = require('react/addons');
 
 var Root = require('./root.jsx');
 
-var navigateActionStore = require('./stores/navigate.js');
-var mainActionStore = require('./stores/main.js');
+var MainActionStore = require('./stores/main.js');
+var NavigateActionStore = require('./stores/navigate.js');
+var AuthenticationActions = require('./stores/api/authentication.js').actions;
 
-require('./stores/api/api.js');
 
 var App = Backbone.Router.extend({
     routes: {
@@ -21,18 +21,25 @@ var App = Backbone.Router.extend({
         // webpack split-point to create new chunks
         require.ensure([], function() {
             var Home = require('./components/home/home.jsx');
-            navigateActionStore.actions.sectionNavigate(Home, 'home');
+            NavigateActionStore.actions.sectionNavigate(Home, NavigateActionStore.SECTION.HOME);
         });
     },
 
     login: function() {
+        // don't go to login page if already authenticated
+        if(MainActionStore.store.data.isAuthenticated) {
+            appInstance.navigate('home', {trigger: true, replace: false});
+            return;
+        }
         // webpack split-point to create new chunks
         require.ensure([], function() {
             var Login = require('./components/login/login.jsx');
-            navigateActionStore.actions.sectionNavigate(Login, 'login');
+            NavigateActionStore.actions.sectionNavigate(Login, NavigateActionStore.SECTION.LOGIN);
         });
     }
 });
+
+
 
 // initialize the router
 var appInstance = new App();
@@ -40,8 +47,12 @@ var appInstance = new App();
 // modularized, return the instance of the router (App)
 module.exports = appInstance;
 
+
+
+
 // start the history (for Backbone.Router)
-Backbone.history.start(/*{silent: true}*/); // set silent=true to not trigger initial route 
+Backbone.history.start({silent: true}); // set silent=true to not trigger initial route 
+
 
 
 
@@ -50,20 +61,21 @@ React.render(<Root/>, document.getElementById('app-root'));
 
 
 
-// listen to main action store
-mainActionStore.store.listen( function(mainStore) {
-    console.log('mainActionStore.store.listen', mainStore);
-    // if is initialized, but not authenticated then route to login
-    if(!mainStore.isAuthenticated) {
-        // navigate to login section
-        // trigger = true - causes the route handler to be called
-        // replace = true - do not create browser history 
-        appInstance.navigate('login', {trigger: true, replace: true});
-    }
+
+// tried to authenticate with stored auth info, but failed
+AuthenticationActions.unableToAuthenticateWithCachedValues.listen( function() {
+    // no authenticated, so go to login
+    appInstance.navigate('login', {trigger: true, replace: true});
 });
 
-// assume we need to go to the login page (assume we are not logged in on first load)
-appInstance.navigate('login', {trigger: true, replace: true});
+// listen for login/authenticated action
+AuthenticationActions.authenticated.listen( function(data) {
+    // when authenticated - go to home section
+    appInstance.navigate('home', {trigger: true, replace: false});
+});
 
+
+// First thing is to try to authenticate with cached tokens/login info - handle results in above action listeners
+AuthenticationActions.authenticateCached();
 
 

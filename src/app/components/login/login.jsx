@@ -1,14 +1,13 @@
 require('./login.scss');
 var $ = require('jquery');
 var React = require('react');
-var Reflux = require('reflux');
 
 // authentication service
 var Authentication = require('../../stores/api/authentication.js');
 
 var Login = React.createClass({
     render: function() {
-        var logo = (this.props.user && (<img src={this.props.user.smallAvatarUrl} />)) || '❄';
+        var logo = '❄';
         return (
             <div className="login-component">
                 <div className="login-box">

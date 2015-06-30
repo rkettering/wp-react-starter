@@ -1,16 +1,20 @@
 var Reflux = require('reflux');
 
 
-
 var actions = Reflux.createActions([
 	"sectionNavigate"
 ]);
 
 
+var SECTION = {
+    LOGIN: 'login',
+    HOME: 'home'
+};
 
 
 var store = Reflux.createStore({
     listenables: [actions],
+
     data: {},
 
     init: function() {
@@ -30,6 +34,11 @@ var store = Reflux.createStore({
             console.error('navigate.onSectionNavigate expected a function, was: ', react);
             return;
         }
+        // is this the active section already? do nothing then
+        if(this.data.current.name == name) {
+            console.log('navigate.onSectionNavigate navigated to same section: ', name);
+            return;
+        }
         this.data.last = this.data.current;
         this.data.current = {name: name, react: react};
         this.trigger(this.data);
@@ -38,4 +47,4 @@ var store = Reflux.createStore({
 
 
 
-module.exports = {store: store, actions: actions};
+module.exports = {store: store, actions: actions, SECTION: SECTION};

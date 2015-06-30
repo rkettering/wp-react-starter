@@ -46,7 +46,6 @@ var store = Reflux.createStore({
 
     // authenticate action handlers
     onAuthenticated: function(data) {
-        console.log('main.onAuthenticated', data);
         if(data.user) {
             this.data.user = data.user;
         }
