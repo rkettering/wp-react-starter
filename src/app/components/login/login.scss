@@ -29,13 +29,22 @@
         input, button {
             margin-bottom: 6px;
             width: 50%;
+            outline: 0;
+        }
+        .msg-space {
+            height: 20px;
+            b { 
+                vertical-align: middle;
+                font-size: 1.5em; 
+            }
         }
         button {
-            margin-top: 20px;
+            margin-top: 6px;
             font-size: 1.2em;
             padding: 10px;
             background: $buzz-yellow;
             border: 1px solid black;
+            outline: 0;
         }
     }
 }

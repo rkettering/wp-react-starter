@@ -17,20 +17,19 @@ var service = {
 // OPERATION - authenticate
 service.authenticate = {
     url: 'authenticate.biws',
-    execute: function(username, password) {
+    execute: function(username, password, silent) {
         var Api = require('./api.js').api,
             data = {username: username, password: password};
 
         return Api.ajax(service.url+this.url, data)
             .done(function(data, status, xhr) {
                 if(xhr.status == 204) {
-                    actions.authenticateFailed(data);
+                    if(!silent) {
+                        actions.authenticateFailed('authentication failed');
+                    }
                 } else {
                     actions.authenticated(data);
                 }
-            })
-            .always(function() {
-                
             });
     }
 };
@@ -40,11 +39,21 @@ actions.authenticateCached.listen(function(){
     var u = sessionStorage.getItem('username'),
         p = sessionStorage.getItem('password');
 
-        if(u && p) {
-            service.authenticate.execute(u, p);
-        } else {
-            actions.unableToAuthenticateWithCachedValues();
-        }
+    function onFail(){
+        actions.unableToAuthenticateWithCachedValues();
+    }
+
+    if(u && p) {
+        service.authenticate.execute(u, p, true /*silent*/)
+            .done(function(data, status, xhr){
+                if(xhr.status == 204) {
+                    onFail();
+                }
+            })
+            .fail(onFail);
+    } else {
+        onFail();
+    }
 });
 
 

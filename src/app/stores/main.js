@@ -6,7 +6,8 @@ var Authentication = require('./api/authentication.js');
 
 
 var actions = Reflux.createActions([
-    "clearApiAjaxError"
+    "clearApiAjaxError",
+    "clearAuthenticationError"
 ]);
 
 
@@ -26,10 +27,16 @@ var store = Reflux.createStore({
         return this.data;
     },
 
+
     // local action handlers
     onClearApiAjaxError: function() {
         if(!this.data.apiAjaxError) { return; }
         this.data.apiAjaxError = null;
+        this.trigger(this.data);
+    },
+    onClearAuthenticationError: function() {
+        if(!this.data.authenticationError) { return; }
+        this.data.authenticationError = null;
         this.trigger(this.data);
     },
 
@@ -52,8 +59,9 @@ var store = Reflux.createStore({
         this.data.isAuthenticated = true;
         this.trigger(this.data);
     },
-    onAuthenticateFailed: function() {
+    onAuthenticateFailed: function(error) {
         this.data.isAuthenticated = false;
+        this.data.authenticationError = error;
         this.trigger(this.data);
     }
 });
