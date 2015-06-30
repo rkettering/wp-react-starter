@@ -51,7 +51,7 @@ module.exports = appInstance;
 
 
 // start the history (for Backbone.Router)
-Backbone.history.start({silent: true}); // set silent=true to not trigger initial route 
+Backbone.history.start(); // set silent=true to not trigger initial route 
 
 
 
