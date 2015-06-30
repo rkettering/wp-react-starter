@@ -6,7 +6,7 @@ var MainStore = require('./main.js');
 
 
 var actions = Reflux.createActions([
-    
+    "populate"
 ]);
 
 
@@ -18,13 +18,16 @@ var store = Reflux.createStore({
 
     init: function() {
         this.data = {};
-        FeedApi.actions.populateFeed(MainStore.store.data.user.id);
     },
     getInitialState: function() {
         return this.data;
     },
 
 
+    // local
+    onPopulate: function() {
+        FeedApi.actions.populateFeed(MainStore.store.data.user.id);
+    },
 
 
     // feed action handlers

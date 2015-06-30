@@ -7,7 +7,7 @@ var FeedStore = require('../../stores/feed.js');
 var Home = React.createClass({
 	mixins: [Reflux.connect(FeedStore.store, "feedStore")],
 	componentDidMount: function() {
-		
+		FeedStore.actions.populate();
 	},
     render: function() {
         return (
