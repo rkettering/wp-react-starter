@@ -1,34 +1,65 @@
-.feed-item-component {
-	border-top: 1px solid gray;
-    overflow: hidden;
-    .head {
-        $head-height: 80px;
-        background: #595959;
-        height: $head-height;
-        padding: 10px 10px 10px 0;
-        .avatar {
-            float: left;
-            height: $head-height;
-            width: 60px;
-            padding-left: 15px;
-            img {
-                width: 30px;
-                border-radius: 15px;
-                border-top-right-radius: 0;
-            }
-        }
-        .name-line {
-            color: #cccccc;
-            font-size: 0.8em;
-            .time {
-                float: right;
-            }
-        }
-        .description {
-            font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-            color: #ffffff;
-            padding: 3px 0 0 0;
-        }
+@import "../../style";
 
+.feed-item-component {
+    overflow: hidden;
+    margin-top: 4px;
+
+    .feed-item-summary {
+        height: 80px;
+        background: $buzz-yellow;
+    }
+
+
+    $feed-item-left-gutter-width: 60px;
+    .feed-item-detail {
+    	border-top: 1px solid gray;
+        overflow: hidden;
+        .head {
+            $head-height: 80px;
+            $head-padding: 10px;
+            background: #595959;
+            height: $head-height;
+            padding: $head-padding $head-padding $head-padding 0;
+            .avatar {
+                $avatar-width: $feed-item-left-gutter-width;
+                float: left;
+                height: $head-height - $head-padding;
+                width: $avatar-width;
+                padding-left: $avatar-width/4;
+                img {
+                    width: $avatar-width/2;
+                    border-radius: $avatar-width/4;
+                    border-top-right-radius: 0;
+                }
+            }
+            .name-line {
+                color: #cccccc;
+                font-size: 0.8em;
+                .time {
+                    float: right;
+                }
+            }
+            .description {
+                font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+                color: #ffffff;
+                padding: 3px 0 0 0;
+            }
+
+        }
+        .body {
+            background: #404040;
+            color: white;
+            .tagged {
+                width: $feed-item-left-gutter-width;
+                padding: 8px;
+                float: left;
+                color: #9A9A9A;
+                font-size: 0.8em;
+                text-align: center;
+            }
+            .content {
+                margin-left: $feed-item-left-gutter-width;
+            }
+        }
     }
 }
